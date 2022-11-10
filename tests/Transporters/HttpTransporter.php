@@ -16,11 +16,13 @@ use Psr\Http\Client\ClientInterface;
 
 beforeEach(function () {
     $this->client = Mockery::mock(ClientInterface::class);
+    $this->parallelClient = Mockery::mock( \GuzzleHttp\ClientInterface::class );
 
     $apiToken = ApiToken::from('foo');
 
     $this->http = new HttpTransporter(
         $this->client,
+        $this->parallelClient,
         BaseUri::from('api.openai.com/v1'),
         Headers::withAuthorization($apiToken)->withContentType(ContentType::JSON),
     );

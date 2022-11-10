@@ -28,7 +28,7 @@ final class OpenAI
 
         $client = new GuzzleClient();
 
-        $transporter = new HttpTransporter($client, $baseUri, $headers);
+        $transporter = new HttpTransporter($client, $client, $baseUri, $headers);
 
         return new Client($transporter);
     }
