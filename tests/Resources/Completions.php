@@ -83,7 +83,7 @@ test('create parallel', function () {
                 ->usage->totalTokens->toBe(17)
                 ->choices->toBeArray()->toHaveCount(1)
                 ->choices->each->toBeInstanceOf(CreateResponseChoice::class)
-                ->choices->each(function ($choice) {
+                ->choices->each(static function ($choice) {
                     $choice
                         ->text->toBe("el, she elaborates more on the Corruptor's role, suggesting K")
                         ->index->toBe(0)
