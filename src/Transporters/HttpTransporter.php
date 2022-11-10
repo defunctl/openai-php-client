@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace OpenAI\Transporters;
 
+use Generator;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response;
 use JsonException;
 use OpenAI\Contracts\Transporter;
@@ -74,9 +76,9 @@ final class HttpTransporter implements Transporter
      */
     public function requestObjects(array $payloads): array
     {
-        $requests = function () use ($payloads) {
+        $requests = function () use ($payloads): Generator {
             foreach ($payloads as $payload) {
-                yield function () use ($payload) {
+                yield function () use ($payload): PromiseInterface {
                     $request = $payload->toRequest($this->baseUri, $this->headers);
 
                     return $this->parallelClient->sendAsync($request);
@@ -88,7 +90,7 @@ final class HttpTransporter implements Transporter
 
         (new Pool($this->parallelClient, $requests(), [
             'concurrency' => 20,
-            'fulfilled' => function (Response $response, $index) use (&$responses) {
+            'fulfilled' => function (Response $response, $index) use (&$responses): void {
                 $contents = $response->getBody()->getContents();
 
                 try {
@@ -100,7 +102,7 @@ final class HttpTransporter implements Transporter
 
                 $responses[] = $response;
             },
-            'rejected' => function (RequestException $reason, $index) {
+            'rejected' => function (RequestException $reason, $index): void {
                 dump($reason);
             },
         ]))->promise()->wait();
