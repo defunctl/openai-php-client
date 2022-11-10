@@ -27,6 +27,19 @@ function completion(): array
 }
 
 /**
+ * @return array<array-key, array<string, mixed>>
+ */
+function completions( int $count ): array {
+    $completions = [];
+
+    for ( $i = 0; $i < $count; $i ++ ) {
+        $completions[] = completion();
+    }
+
+    return $completions;
+}
+
+/**
  * @return array<string, mixed>
  */
 function completionWithLogprobs(): array
