@@ -15,12 +15,10 @@ use OpenAI\Exceptions\UnserializableResponse;
  */
 interface Parallel
 {
-
     /**
      * Queue up parallel requests.
      *
      * @param  array<string, mixed>  $parameters
-     *
      * @return $this
      */
     public function createParallel(array $parameters): self;
@@ -35,5 +33,4 @@ interface Parallel
      * @throws ErrorException
      */
     public function run(): array;
-
 }

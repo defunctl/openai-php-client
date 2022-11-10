@@ -27,7 +27,6 @@ interface Transporter
      * Sends a pool of requests to the server.
      *
      * @param  Payload[]  $payloads
-     *
      * @return array<array-key, array<array-key, mixed>>
      *
      * @throws ErrorException|UnserializableResponse|TransporterException
@@ -40,5 +39,4 @@ interface Transporter
      * @throws ErrorException|TransporterException
      */
     public function requestContent(Payload $payload): string;
-
 }

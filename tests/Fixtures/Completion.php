@@ -29,10 +29,11 @@ function completion(): array
 /**
  * @return array<array-key, array<string, mixed>>
  */
-function completions( int $count ): array {
+function completions(int $count): array
+{
     $completions = [];
 
-    for ( $i = 0; $i < $count; $i ++ ) {
+    for ($i = 0; $i < $count; $i++) {
         $completions[] = completion();
     }
 

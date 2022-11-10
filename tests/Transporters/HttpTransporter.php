@@ -16,7 +16,7 @@ use Psr\Http\Client\ClientInterface;
 
 beforeEach(function () {
     $this->client = Mockery::mock(ClientInterface::class);
-    $this->parallelClient = Mockery::mock( \GuzzleHttp\ClientInterface::class );
+    $this->parallelClient = Mockery::mock(\GuzzleHttp\ClientInterface::class);
 
     $apiToken = ApiToken::from('foo');
 

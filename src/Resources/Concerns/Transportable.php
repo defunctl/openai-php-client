@@ -9,7 +9,6 @@ use OpenAI\ValueObjects\Transporter\Payload;
 
 trait Transportable
 {
-
     /**
      * The collection of payloads to run via a concurrent pool.
      *
@@ -24,5 +23,4 @@ trait Transportable
     {
         // ..
     }
-
 }

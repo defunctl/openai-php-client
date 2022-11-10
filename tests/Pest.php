@@ -11,18 +11,18 @@ function mockClient(string $method, string $resource, array $params, array|strin
 {
     $transporter = Mockery::mock(Transporter::class);
 
-    if ( $methodName === 'requestObjects' ) {
+    if ($methodName === 'requestObjects') {
         $transporter
             ->shouldReceive($methodName)
             ->once()
-            ->withArgs( function ( array $payloads ) use ( $method, $resource ) {
-                foreach( $payloads as $payload ) {
+            ->withArgs(function (array $payloads) use ($method, $resource) {
+                foreach ($payloads as $payload) {
                     $baseUri = BaseUri::from('api.openai.com/v1');
                     $headers = Headers::withAuthorization(ApiToken::from('foo'));
 
                     $request = $payload->toRequest($baseUri, $headers);
 
-                    if ( $request->getMethod() !== $method
+                    if ($request->getMethod() !== $method
                            || $request->getUri()->getPath() !== "/v1/$resource"
                     ) {
                         return false;

@@ -72,13 +72,14 @@ final class HttpTransporter implements Transporter
      *
      * {@inheritDoc}
      */
-    public function requestObjects(array $payloads): array {
-        $requests = function() use ( $payloads ) {
-            foreach ( $payloads as $payload ) {
-                yield function () use ( $payload ) {
-                    $request = $payload->toRequest( $this->baseUri, $this->headers );
+    public function requestObjects(array $payloads): array
+    {
+        $requests = function () use ($payloads) {
+            foreach ($payloads as $payload) {
+                yield function () use ($payload) {
+                    $request = $payload->toRequest($this->baseUri, $this->headers);
 
-                    return $this->parallelClient->sendAsync( $request );
+                    return $this->parallelClient->sendAsync($request);
                 };
             }
         };
@@ -106,7 +107,6 @@ final class HttpTransporter implements Transporter
 
         return $responses;
     }
-
 
     /**
      * {@inheritDoc}
