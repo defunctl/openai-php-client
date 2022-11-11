@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenAI\Transporters;
 
+use Closure;
 use Generator;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
@@ -33,6 +34,7 @@ final class HttpTransporter implements Transporter
         private readonly \GuzzleHttp\ClientInterface $parallelClient,
         private readonly BaseUri $baseUri,
         private readonly Headers $headers,
+        private readonly int|null|Closure $concurrency = null
     ) {
         // ..
     }
@@ -89,7 +91,7 @@ final class HttpTransporter implements Transporter
         $responses = [];
 
         (new Pool($this->parallelClient, $requests(), [
-            'concurrency' => 20,
+            'concurrency' => $this->concurrency,
             'fulfilled' => function (Response $response, $index) use (&$responses): void {
                 $contents = $response->getBody()->getContents();
 
