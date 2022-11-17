@@ -27,14 +27,20 @@ function completion(): array
 }
 
 /**
+ * @param  int  $count  The number of completions to create.
+ * @param  array-key[]  $keys  Keys to assign.
  * @return array<array-key, array<string, mixed>>
  */
-function completions(int $count): array
+function completions(int $count, array $keys = []): array
 {
     $completions = [];
 
     for ($i = 0; $i < $count; $i++) {
         $completions[] = completion();
+    }
+
+    if ($keys) {
+        $completions = array_combine($keys, $completions);
     }
 
     return $completions;
