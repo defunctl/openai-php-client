@@ -36,9 +36,9 @@ final class Completions implements Parallel
         return CreateResponse::from($result);
     }
 
-    public function createParallel(array $parameters): self
+    public function createParallel(array $parameters, int|string|null $key = null): self
     {
-        $this->payloads[] = Payload::create('completions', $parameters);
+        $this->payloads[$key] = Payload::create('completions', $parameters);
 
         return $this;
     }
