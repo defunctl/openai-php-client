@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenAI\Resources;
 
+use InvalidArgumentException;
 use OpenAI\Contracts\Parallel;
 use OpenAI\Exceptions\ErrorException;
 use OpenAI\Exceptions\TransporterException;
@@ -38,7 +39,15 @@ final class Completions implements Parallel
 
     public function createParallel(array $parameters, int|string|null $key = null): self
     {
-        $this->payloads[$key] = Payload::create('completions', $parameters);
+        if (! is_null($key) && array_key_exists($key, $this->payloads)) {
+            throw new InvalidArgumentException('Duplicate array key detected');
+        }
+
+        if (is_null($key)) {
+            $this->payloads[] = Payload::create('completions', $parameters);
+        } else {
+            $this->payloads[$key] = Payload::create('completions', $parameters);
+        }
 
         return $this;
     }
