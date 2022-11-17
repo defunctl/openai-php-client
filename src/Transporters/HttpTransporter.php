@@ -102,7 +102,7 @@ final class HttpTransporter implements Transporter
                     throw new UnserializableResponse($jsonException);
                 }
 
-                $responses[] = $response;
+                $responses[$index] = $response;
             },
             'rejected' => function (RequestException $reason, $index): void {
                 dump($reason);
