@@ -79,8 +79,8 @@ final class HttpTransporter implements Transporter
     public function requestObjects(array $payloads): array
     {
         $requests = function () use ($payloads): Generator {
-            foreach ($payloads as $payload) {
-                yield function () use ($payload): PromiseInterface {
+            foreach ($payloads as $key => $payload) {
+                yield $key => function () use ($payload): PromiseInterface {
                     $request = $payload->toRequest($this->baseUri, $this->headers);
 
                     return $this->parallelClient->sendAsync($request);
