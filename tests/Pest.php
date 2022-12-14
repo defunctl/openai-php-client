@@ -11,18 +11,40 @@ function mockClient(string $method, string $resource, array $params, array|strin
 {
     $transporter = Mockery::mock(Transporter::class);
 
-    $transporter
-        ->shouldReceive($methodName)
-        ->once()
-        ->withArgs(function (Payload $payload) use ($method, $resource) {
-            $baseUri = BaseUri::from('api.openai.com/v1');
-            $headers = Headers::withAuthorization(ApiToken::from('foo'));
+    if ($methodName === 'requestObjects') {
+        $transporter
+            ->shouldReceive($methodName)
+            ->once()
+            ->withArgs(function (array $payloads) use ($method, $resource) {
+                foreach ($payloads as $payload) {
+                    $baseUri = BaseUri::from('api.openai.com/v1');
+                    $headers = Headers::withAuthorization(ApiToken::from('foo'));
 
-            $request = $payload->toRequest($baseUri, $headers);
+                    $request = $payload->toRequest($baseUri, $headers);
 
-            return $request->getMethod() === $method
-                && $request->getUri()->getPath() === "/v1/$resource";
-        })->andReturn($response);
+                    if ($request->getMethod() !== $method
+                           || $request->getUri()->getPath() !== "/v1/$resource"
+                    ) {
+                        return false;
+                    }
+                }
+
+                return true;
+            })->andReturn($response);
+    } else {
+        $transporter
+            ->shouldReceive($methodName)
+            ->once()
+            ->withArgs(function (Payload $payload) use ($method, $resource) {
+                $baseUri = BaseUri::from('api.openai.com/v1');
+                $headers = Headers::withAuthorization(ApiToken::from('foo'));
+
+                $request = $payload->toRequest($baseUri, $headers);
+
+                return $request->getMethod() === $method
+                       && $request->getUri()->getPath() === "/v1/$resource";
+            })->andReturn($response);
+    }
 
     return new Client($transporter);
 }
@@ -30,4 +52,9 @@ function mockClient(string $method, string $resource, array $params, array|strin
 function mockContentClient(string $method, string $resource, array $params, string $response)
 {
     return mockClient($method, $resource, $params, $response, 'requestContent');
+}
+
+function mockParallelClient(string $method, string $resource, array $params, array $response)
+{
+    return mockClient($method, $resource, $params, $response, 'requestObjects');
 }
