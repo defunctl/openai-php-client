@@ -20,7 +20,6 @@ interface Parallel
      *
      * @param  array<string, mixed>  $parameters  The OpenAI request parameters.
      * @param  array-key|null  $key  The index to store the promise in.
-     *
      * @return static
      */
     public function createParallel(array $parameters, int|string|null $key = null): self;
@@ -28,10 +27,11 @@ interface Parallel
     /**
      * Execute all parallel requests.
      *
+     * @return TResponse
+     *
      * @throws TransporterException
      * @throws UnserializableResponse
      * @throws ErrorException
-     * @return TResponse
      */
     public function run(): array;
 }
