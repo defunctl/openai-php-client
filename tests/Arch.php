@@ -38,4 +38,9 @@ test('openai')->expect('OpenAI')->toOnlyUse([
     'GuzzleHttp\Psr7',
     'OpenAI\Resources',
     'OpenAI\Contracts',
+    'GuzzleHttp\Exception\RequestException',
+    'GuzzleHttp\Pool',
+    'GuzzleHttp\Promise\PromiseInterface',
+    'GuzzleHttp\ClientInterface',
+    'dump',
 ]);
