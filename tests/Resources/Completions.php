@@ -174,7 +174,7 @@ test('throws duplicate key exception', function () {
         'test-1',
         'test-2',
         'test-2',
-    ]));
+    ]), 0);
 
     $client->completions()
         ->createParallel([
