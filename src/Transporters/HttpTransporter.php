@@ -93,7 +93,7 @@ final class HttpTransporter implements Transporter
         (new Pool($this->parallelClient, $requests(), [
             'concurrency' => $this->concurrency,
             'fulfilled' => function (Response $response, $index) use (&$responses): void {
-                $contents = $response->getBody()->getContents();
+                $contents = (string) $response->getBody();
 
                 try {
                     /** @var array{error?: array{message: string, type: string, code: string}} $response */
