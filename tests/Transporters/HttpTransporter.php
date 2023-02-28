@@ -8,7 +8,7 @@ use OpenAI\Exceptions\ErrorException;
 use OpenAI\Exceptions\TransporterException;
 use OpenAI\Exceptions\UnserializableResponse;
 use OpenAI\Transporters\HttpTransporter;
-use OpenAI\ValueObjects\ApiToken;
+use OpenAI\ValueObjects\ApiKey;
 use OpenAI\ValueObjects\Transporter\BaseUri;
 use OpenAI\ValueObjects\Transporter\Headers;
 use OpenAI\ValueObjects\Transporter\Payload;
@@ -18,13 +18,13 @@ beforeEach(function () {
     $this->client = Mockery::mock(ClientInterface::class);
     $this->parallelClient = Mockery::mock(\GuzzleHttp\ClientInterface::class);
 
-    $apiToken = ApiToken::from('foo');
+    $apiKey = ApiKey::from('foo');
 
     $this->http = new HttpTransporter(
         $this->client,
         $this->parallelClient,
         BaseUri::from('api.openai.com/v1'),
-        Headers::withAuthorization($apiToken)->withContentType(ContentType::JSON),
+        Headers::withAuthorization($apiKey)->withContentType(ContentType::JSON),
     );
 });
 
@@ -110,7 +110,7 @@ test('request object client errors', function () {
     $payload = Payload::list('models');
 
     $baseUri = BaseUri::from('api.openai.com');
-    $headers = Headers::withAuthorization(ApiToken::from('foo'));
+    $headers = Headers::withAuthorization(ApiKey::from('foo'));
 
     $this->client
         ->shouldReceive('sendRequest')
@@ -179,7 +179,7 @@ test('request content client errors', function () {
     $payload = Payload::list('models');
 
     $baseUri = BaseUri::from('api.openai.com');
-    $headers = Headers::withAuthorization(ApiToken::from('foo'));
+    $headers = Headers::withAuthorization(ApiKey::from('foo'));
 
     $this->client
         ->shouldReceive('sendRequest')

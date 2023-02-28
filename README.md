@@ -1,7 +1,7 @@
 <p align="center">
     <img src="https://raw.githubusercontent.com/openai-php/client/main/art/example.png" width="600" alt="OpenAI PHP">
     <p align="center">
-        <a href="https://github.com/openai-php/client/actions"><img alt="GitHub Workflow Status (master)" src="https://img.shields.io/github/workflow/status/openai-php/client/Tests/main"></a>
+        <a href="https://github.com/openai-php/client/actions"><img alt="GitHub Workflow Status (main)" src="https://img.shields.io/github/actions/workflow/status/openai-php/client/tests.yml?branch=main&label=tests&style=round-square"></a>
         <a href="https://packagist.org/packages/openai-php/client"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/openai-php/client"></a>
         <a href="https://packagist.org/packages/openai-php/client"><img alt="Latest Version" src="https://img.shields.io/packagist/v/openai-php/client"></a>
         <a href="https://packagist.org/packages/openai-php/client"><img alt="License" src="https://img.shields.io/github/license/openai-php/client"></a>
@@ -9,7 +9,7 @@
 </p>
 
 ------
-**OpenAI PHP** is a supercharged PHP API client that allows you to interact with the [Open AI API](https://beta.openai.com/docs/api-reference/introduction).
+**OpenAI PHP** is a supercharged community PHP API client that allows you to interact with the [Open AI API](https://beta.openai.com/docs/api-reference/introduction).
 
 ## Get Started
 
@@ -27,7 +27,7 @@ Then, interact with OpenAI's API:
 $client = OpenAI::client('YOUR_API_KEY');
 
 $result = $client->completions()->create([
-    'model' => 'davinci',
+    'model' => 'text-davinci-003',
     'prompt' => 'PHP is',
 ]);
 
@@ -48,7 +48,7 @@ $response = $client->models()->list();
 $response->object; // 'list'
 
 foreach ($response->data as $result) {
-    $result->id; // 'text-davinci-002'
+    $result->id; // 'text-davinci-003'
     $result->object; // 'model'
     // ...
 }
@@ -61,13 +61,13 @@ $response->toArray(); // ['object' => 'list', 'data' => [...]]
 Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
 
 ```php
-$response = $client->models()->retrieve('text-davinci-002');
+$response = $client->models()->retrieve('text-davinci-003');
 
-$response->id; // 'text-davinci-002'
+$response->id; // 'text-davinci-003'
 $response->object; // 'model'
 $response->created; // 1642018370
 $response->ownedBy; // 'openai'
-$response->root; // 'text-davinci-002'
+$response->root; // 'text-davinci-003'
 $response->parent; // null
 
 foreach ($response->permission as $result) {
@@ -85,7 +85,7 @@ foreach ($response->permission as $result) {
     $result->isBlocking; // false 
 }
 
-$response->toArray(); // ['id' => 'text-davinci-002', ...]
+$response->toArray(); // ['id' => 'text-davinci-003', ...]
 ```
 
 #### `delete`
@@ -110,7 +110,7 @@ Creates a completion for the provided prompt and parameters.
 
 ```php
 $response = $client->completions()->create([
-    'model' => 'text-davinci-002',
+    'model' => 'text-davinci-003',
     'prompt' => 'Say this is a test',
     'max_tokens' => 6,
     'temperature' => 0
@@ -119,13 +119,13 @@ $response = $client->completions()->create([
 $response->id; // 'cmpl-uqkvlQyYK7bGYrRHQ0eXlWi7'
 $response->object; // 'text_completion'
 $response->created; // 1589478378
-$response->model; // 'text-davinci-002'
+$response->model; // 'text-davinci-003'
 
 foreach ($response->choices as $result) {
     $result->text; // '\n\nThis is a test'
     $result->index; // 0
     $result->logprobs; // null
-    $result->finishReason; // 'length'
+    $result->finishReason; // 'length' or null
 }
 
 $response->usage->promptTokens; // 5,
@@ -279,7 +279,7 @@ $client->files()->download($file); // '{"prompt": "<prompt text>", ...'
 Creates a job that fine-tunes a specified model from a given dataset.
 
 ```php
-$client->fineTunes()->create($parameters);
+$response = $client->fineTunes()->create($parameters);
 
 $response->id; // 'ft-AF1WoRqd3aJAHsqc9NY7iL8F'
 $response->object; // 'fine-tune'
